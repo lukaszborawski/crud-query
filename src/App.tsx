@@ -1,5 +1,5 @@
 import './App.css'
-import Users from './Users'
+import Users from './features/Users'
 import {
   QueryClient,
   QueryClientProvider
