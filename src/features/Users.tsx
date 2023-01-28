@@ -1,11 +1,18 @@
-import { useQuery } from '@tanstack/react-query'
-import { getUsers } from '../api/usersApi'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { getUsers, deleteUser } from '../api/usersApi'
 
 const Users = () => {
+  const queryClient = useQueryClient()
   const { data: users, isLoading, error } = useQuery(
     ["users"],
     getUsers
   )
+
+  const deleteUserMutation = useMutation(deleteUser, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(["users"])
+    }
+  })
 
   return (
     <>
@@ -17,7 +24,7 @@ const Users = () => {
             <div key={user.id}>
               <p>{user.name}</p>
               <p>{user.description}</p>
-
+              <button onClick={() => deleteUserMutation.mutate({ id: user.id })}>Delete</button>
             </div>
           )
         })}
